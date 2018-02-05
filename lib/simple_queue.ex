@@ -1,18 +1,31 @@
 defmodule SimpleQueue do
-  @moduledoc """
-  Documentation for SimpleQueue.
-  """
+  alias SimpleQueue.Queue
 
-  @doc """
-  Hello world.
+  def new(dir) do
+    new(dir, %{})
+  end
 
-  ## Examples
+  def new(dir, params) do
+    Queue.start_link(dir, params)
+  end
 
-      iex> SimpleQueue.hello
-      :world
+  def add(queue_pid, message) do
+    Queue.add(queue_pid, message)
+  end
 
-  """
-  def hello do
-    :world
+  def add(queue, msg) do
+    Queue.add(queue, msg)
+  end
+
+  def get(queue) do
+    Queue.get(queue)
+  end
+
+  def ack(queue, msg_id) do
+    Queue.ack(queue, msg_id)
+  end
+
+  def reject(queue, msg_id) do
+    Queue.reject(queue, msg_id)
   end
 end

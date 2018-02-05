@@ -1,4 +1,13 @@
 %{
+  "bunt": {:hex, :bunt, "0.2.0", "951c6e801e8b1d2cbe58ebbd3e616a869061ddadcc4863d0a2182541acae9a38", [:mix], [], "hexpm"},
+  "credo": {:hex, :credo, "0.9.0-rc3", "7875b537e9723b2d106f192db387d35d823426431fc8462df15286c46858581b", [:mix], [{:bunt, "~> 0.2.0", [hex: :bunt, repo: "hexpm", optional: false]}, {:poison, ">= 0.0.0", [hex: :poison, repo: "hexpm", optional: false]}], "hexpm"},
+  "datum": {:git, "https://github.com/fogfish/datum", "cddc9ada86dd2a98da51a03f8d26e828a8551e2b", [branch: "master"]},
   "earmark": {:hex, :earmark, "1.2.4", "99b637c62a4d65a20a9fb674b8cffb8baa771c04605a80c911c4418c69b75439", [:mix], [], "hexpm"},
+  "erl2ex": {:hex, :erl2ex, "0.0.9", "626cbdf8a23f44b8a70be2ae0c8892fd9c1b14eacb8fe94491bcc88a1c2bd7ae", [:mix], [], "hexpm"},
+  "esq": {:git, "https://github.com/fogfish/esq.git", "a94e942b3d391a39368034bc653f0d5911dd553e", []},
   "ex_doc": {:git, "https://github.com/elixir-lang/ex_doc.git", "c52cff4cf1f292ef7df0d2426ffbdac98d6391a7", []},
+  "feta": {:git, "https://github.com/fogfish/feta", "0621beb5ed4d02f1fe8b109c8a9fcbffc42c5730", [branch: "master"]},
+  "pipe": {:git, "https://github.com/kfsm/pipe", "a091f919659818cfe37e2d8c5d44d73962322ab9", [branch: "master"]},
+  "poison": {:hex, :poison, "3.1.0", "d9eb636610e096f86f25d9a46f35a9facac35609a7591b3be3326e99a0484665", [:mix], [], "hexpm"},
+  "uid": {:git, "https://github.com/fogfish/uid", "698ebcb27b273a2f879d8bd24be5f5ea54c98850", [branch: "master"]},
 }
