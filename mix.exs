@@ -4,7 +4,7 @@ defmodule SimpleQueue.MixProject do
   def project do
     [
       app: :simple_queue,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -29,7 +29,6 @@ defmodule SimpleQueue.MixProject do
     [
       {:ex_doc, github: "elixir-lang/ex_doc", override: true, only: :dev},
       {:credo, "~> 0.9.0-rc1", only: [:dev, :test], runtime: false},
-      {:esq, github: "fogfish/esq", override: true, only: :dev}
     ]
   end
 end
