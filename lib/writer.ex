@@ -73,7 +73,7 @@ defmodule SimpleQueue.Writer do
       |> to_string()
       |> Base.encode16()
 
-    :ok = File.rename(file, Path.join([[name, ".", extension]]))
+    File.rename(file, Path.join([[name, ".", extension]]))
   end
 
   def length(%Writer{descriptor: nil}), do: 0

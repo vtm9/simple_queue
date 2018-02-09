@@ -30,11 +30,22 @@ defmodule SimpleQueueTest do
   end
 
   test "pass 10 MB message through queue" do
-    {:ok, pid} = SimpleQueue.new("tmp/test3")
+    {:ok, pid} = SimpleQueue.new("tmp/test4")
     payload = String.duplicate("1", 1024 * 1024 * 10)
 
     SimpleQueue.add(pid, payload)
 
     %{id: id, payload: ^payload} = SimpleQueue.get(pid)
+  end
+
+  test "pass two messages through queue" do
+    {:ok, pid} = SimpleQueue.new("tmp/test5")
+    payload1 = "payload1"
+    payload2 = "payload2"
+    SimpleQueue.add(pid, payload1)
+    SimpleQueue.add(pid, payload2)
+
+    assert %{id: id, payload: ^payload1} = SimpleQueue.get(pid)
+    assert %{id: id, payload: ^payload2} = SimpleQueue.get(pid)
   end
 end
