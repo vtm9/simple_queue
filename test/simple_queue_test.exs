@@ -48,4 +48,24 @@ defmodule SimpleQueueTest do
     assert %{id: id, payload: ^payload1} = SimpleQueue.get(pid)
     assert %{id: id, payload: ^payload2} = SimpleQueue.get(pid)
   end
+
+  test "ack real message" do
+    {:ok, pid} = SimpleQueue.new("tmp/test6")
+    payload = "payload"
+    SimpleQueue.add(pid, payload)
+    %{id: id, payload: ^payload} = SimpleQueue.get(pid)
+
+    assert :ok = SimpleQueue.ack(pid, id)
+    assert :empty = SimpleQueue.get(pid)
+  end
+
+  test "reject real message" do
+    {:ok, pid} = SimpleQueue.new("tmp/test7")
+    payload = "payload"
+    SimpleQueue.add(pid, payload)
+    %{id: id, payload: ^payload} = SimpleQueue.get(pid)
+
+    assert :ok = SimpleQueue.reject(pid, id)
+    assert %{id: id, payload: ^payload} = SimpleQueue.get(pid)
+  end
 end

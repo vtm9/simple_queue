@@ -13,19 +13,15 @@ defmodule SimpleQueue do
     Queue.add(queue_pid, message)
   end
 
-  def add(queue, msg) do
-    Queue.add(queue, msg)
+  def get(queue_pid) do
+    Queue.get(queue_pid)
   end
 
-  def get(queue) do
-    Queue.get(queue)
+  def ack(queue_pid, msg_id) do
+    Queue.ack(queue_pid, msg_id)
   end
 
-  def ack(queue, msg_id) do
-    Queue.ack(queue, msg_id)
-  end
-
-  def reject(queue, msg_id) do
-    Queue.reject(queue, msg_id)
+  def reject(queue_pid, msg_id) do
+    Queue.reject(queue_pid, msg_id)
   end
 end

@@ -37,6 +37,14 @@ defmodule SimpleQueue.Queue do
     GenServer.call(queue_pid, :get, @timeout)
   end
 
+  def ack(queue_pid, message_id) do
+    GenServer.call(queue_pid, {:ack, message_id}, @timeout)
+  end
+
+  def reject(queue_pid, message_id) do
+    GenServer.call(queue_pid, {:reject, message_id}, @timeout)
+  end
+
   # SERVER
 
   def init([dir, params]) do
@@ -56,10 +64,14 @@ defmodule SimpleQueue.Queue do
     {:reply, message, new_state}
   end
 
-  def handle_cast(:ack, _from, state) do
-    # {:reply, {:ok}, state}
+  def handle_call({:ack, message_id}, _from, state) do
+    new_state = ack_(message_id, state)
+    {:reply, :ok, new_state}
+  end
 
-    {:stop, :normal, state}
+  def handle_call({:reject, message_id}, _from, state) do
+    new_state = reject_(message_id, state)
+    {:reply, :ok, new_state}
   end
 
   # def handle_call(:drop, _from, state) do
@@ -77,7 +89,6 @@ defmodule SimpleQueue.Queue do
       state
       |> maybe_sync_on_disk_store()
 
-    # deq_in_flight(Uid, _),
     new_store = Store.add(pack(id, payload), new_state.store)
     %Queue{new_state | store: new_store}
   end
@@ -98,6 +109,22 @@ defmodule SimpleQueue.Queue do
         {{:value, message}, new_head} = :queue.out(head)
         new_state = add_to_unacked(message, %Queue{new_state | head: new_head})
         {message, new_state}
+    end
+  end
+
+  defp ack_(message_id, %Queue{unacked: unacked} = state) do
+    new_unacked = Unacked.ack(message_id, unacked)
+    %Queue{state | unacked: new_unacked}
+  end
+
+  defp reject_(message_id, %Queue{unacked: unacked} = state) do
+    case Unacked.get(message_id, unacked) do
+      nil ->
+        state
+      message ->
+        new_state = add_(message.payload, state)
+        new_unacked = Unacked.reject(message_id, new_state.unacked)
+        %Queue{new_state | unacked: new_unacked}
     end
   end
 
