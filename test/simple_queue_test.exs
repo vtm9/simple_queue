@@ -35,7 +35,7 @@ defmodule SimpleQueueTest do
 
     SimpleQueue.add(pid, payload)
 
-    %{id: id, payload: ^payload} = SimpleQueue.get(pid)
+    %{payload: ^payload} = SimpleQueue.get(pid)
   end
 
   test "pass two messages through queue" do
@@ -45,8 +45,8 @@ defmodule SimpleQueueTest do
     SimpleQueue.add(pid, payload1)
     SimpleQueue.add(pid, payload2)
 
-    assert %{id: id, payload: ^payload1} = SimpleQueue.get(pid)
-    assert %{id: id, payload: ^payload2} = SimpleQueue.get(pid)
+    assert %{payload: ^payload1} = SimpleQueue.get(pid)
+    assert %{payload: ^payload2} = SimpleQueue.get(pid)
   end
 
   test "ack real message" do
@@ -59,13 +59,28 @@ defmodule SimpleQueueTest do
     assert :empty = SimpleQueue.get(pid)
   end
 
-  test "reject real message" do
+  test "reject message to the tail of the queue" do
     {:ok, pid} = SimpleQueue.new("tmp/test7")
-    payload = "payload"
-    SimpleQueue.add(pid, payload)
-    %{id: id, payload: ^payload} = SimpleQueue.get(pid)
+    payload1 = "payload1"
+    payload2 = "payload2"
+    SimpleQueue.add(pid, payload1)
+    SimpleQueue.add(pid, payload2)
+    %{id: id, payload: ^payload1} = SimpleQueue.get(pid)
 
     assert :ok = SimpleQueue.reject(pid, id)
-    assert %{id: id, payload: ^payload} = SimpleQueue.get(pid)
+    assert %{payload: ^payload2} = SimpleQueue.get(pid)
+    assert %{payload: ^payload1} = SimpleQueue.get(pid)
+  end
+
+  test "Persist messages" do
+    {:ok, pid} = SimpleQueue.new("tmp/test8")
+    payload = "payload"
+    SimpleQueue.add(pid, payload)
+
+    Process.unlink(pid)
+    Process.exit(pid, :kill)
+
+    {:ok, pid} = SimpleQueue.new("tmp/test8")
+    %{payload: ^payload} = SimpleQueue.get(pid)
   end
 end
